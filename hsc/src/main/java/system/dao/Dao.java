@@ -17,6 +17,7 @@ public class Dao implements IDao {
 	public static List<DiagnosticCenter> centerList=new ArrayList();
 	public static HashMap<String,String> admins=getMap();
 	public static DiagnosticCenter center;
+	public static String appoint;
 	public Dao()
 	{
 		super();
@@ -127,7 +128,15 @@ public class Dao implements IDao {
 		return flag;
 	}
 	public boolean approveAppointment() {
-	
+		int num=0;
+	for (DiagnosticCenter diagnosticCenter : centerList) {
+		if(diagnosticCenter.getAppointmentList().get(num).getAppointmentId().equals(appoint))
+		{
+			diagnosticCenter.getAppointmentList().get(num).setApproved(true);
+			return true;
+		}
+		num++;
+	}
 		return false;
 	}
 

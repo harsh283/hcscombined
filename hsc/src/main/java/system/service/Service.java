@@ -34,7 +34,8 @@ IDao dao=new Dao();
 
 	public boolean approveAppointment() {
 		// TODO Auto-generated method stub
-		return false;
+		
+		return dao.approveAppointment();
 	}
 
 	public String makeAppointment(Person person, DiagnosticCenter center, Test test, LocalDate date) {

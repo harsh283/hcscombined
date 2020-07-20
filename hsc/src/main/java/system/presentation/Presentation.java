@@ -6,6 +6,7 @@ import java.util.Scanner;
 import system.beans.DiagnosticCenter;
 import system.beans.Test;
 import system.dao.Dao;
+import system.exception.InvalidCenterNameException;
 import system.service.IService;
 import system.service.Service;
 
@@ -80,6 +81,13 @@ public class Presentation {
 			case 4:
 				removeTest();
 				break;
+			case 5:
+				try {
+					approveAppointment();
+				} catch (InvalidCenterNameException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 
@@ -200,7 +208,64 @@ public class Presentation {
 			System.out.println(internalFlag);
 			System.out.println("Enter the valid name of the test");
 		}
+		
+	}
+		
+}
+
+	private static void approveAppointment() throws InvalidCenterNameException 
+	{
+		boolean flag5=false;
+		int number;
+		String name="";
+		String appId="";
+		do {
+			scan = new Scanner(System.in);
+			System.out.println("Choose the diagnostic center where the appointment has to be approved kindly enter the center name");
+			for(DiagnosticCenter center : Dao.centerList)
+			{
+				System.out.println(center.getCenterName()+" "+center.getCenterId());
+			}
+			name=scan.nextLine();
+			
+			flag5=true;
+			boolean methodFlag=false;
+			for (DiagnosticCenter center : Dao.centerList) {
+				if(name.equalsIgnoreCase(center.getCenterName()))
+				{
+					Dao.center=center;
+					methodFlag=true;
+					break;
+				}
+			}
+			if(methodFlag==true)
+			{
+				System.out.println("Enter the appId");
+				appId=scan.next();
+				int n=0;
+				
+				for (DiagnosticCenter iterable_element : Dao.centerList) {
+				
+					if(iterable_element.getAppointmentList().get(n).getAppointmentId().equals(appId))
+					{
+						Dao.appoint=appId;
+						if(service.approveAppointment())
+						{
+							System.out.println("Appointment approved Successfully");
+							System.out.println(Dao.centerList);
+							break;
+						}
+					}
+					n++;
+				}
+				
+			}
+			else {
+				
+				throw new InvalidCenterNameException("Enter from the above displayed ones");
+			}
 		}
+		while(!flag5);
 	}
 	
 
